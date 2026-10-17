@@ -1,0 +1,8 @@
+<resources>
+    <color name="vault_bg">#0C0A08</color>
+
+    <style name="Theme.Vault" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/vault_bg</item>
+        <item name="android:colorAccent">#F59E0B</item>
+    </style>
+</resources>
