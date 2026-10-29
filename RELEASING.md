@@ -6,7 +6,7 @@ You do steps 1–6 once. After that, every update is step 7.
 
 ## 1. Create the GitHub repository
 
-1. Go to **github.com/new** (signed in as `alpho4jesus-dev`).
+1. Go to **github.com/new** (signed in as `penscribed`).
 2. **Repository name:** `vault`
 3. Choose **Public**. The app reads releases without a password, so the repo has to be public. No passwords or keys are in the code.
 4. Leave **Add a README**, **.gitignore** and **license** unticked. The repo must be empty.
@@ -18,7 +18,7 @@ You do steps 1–6 once. After that, every update is step 7.
 1. Unzip `Vault.zip` and open the `Vault` folder in Android Studio.
 2. Menu **VCS → Enable Version Control Integration → Git** (skip if it's already a Git project).
 3. Menu **Git → Commit…** → tick all files → message `Vault 1.2.0` → **Commit**.
-4. Menu **Git → Manage Remotes… → +** → URL `https://github.com/alpho4jesus-dev/vault.git` → OK.
+4. Menu **Git → Manage Remotes… → +** → URL `https://github.com/penscribed/vault.git` → OK.
 5. Menu **Git → Push…** → **Push**. Sign in to GitHub when asked.
 
 **Or from a terminal / Command Prompt inside the `Vault` folder**
@@ -27,7 +27,7 @@ git init
 git add .
 git commit -m "Vault 1.2.0"
 git branch -M main
-git remote add origin https://github.com/alpho4jesus-dev/vault.git
+git remote add origin https://github.com/penscribed/vault.git
 git push -u origin main
 ```
 
@@ -83,7 +83,7 @@ Open the **Actions** tab. **Build check** runs automatically after your push.
 
 ## 8. Install on your phone (first time only)
 
-1. On the phone, open **github.com/alpho4jesus-dev/vault/releases**.
+1. On the phone, open **github.com/penscribed/vault/releases**.
 2. Download `Vault-1.2.0.apk` and open it. If Android asks, allow installs from your browser.
 3. **If you already had Vault installed from Android Studio:**
    in the old app go to **More › Backup & restore** and email yourself a backup. Then uninstall it,

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -9,10 +11,10 @@ plugins {
 val vaultVersionName = (project.findProperty("versionName") as String?) ?: "1.2.0"
 val vaultVersionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 10200
 // GitHub repo that publishes releases (owner/name). Override with -PupdateRepo=owner/name.
-val updateRepo = (project.findProperty("updateRepo") as String?) ?: "alpho4jesus-dev/vault"
+val updateRepo = (project.findProperty("updateRepo") as String?) ?: "penscribed/vault"
 
 // Release signing: from environment (GitHub Actions secrets) or a local keystore.properties file.
-val keystoreProps = java.util.Properties().apply {
+val keystoreProps = Properties().apply {
     val f = rootProject.file("keystore.properties")
     if (f.exists()) f.inputStream().use { load(it) }
 }

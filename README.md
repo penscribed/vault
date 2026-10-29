@@ -37,7 +37,7 @@ Requirements: Android 8.0+ (minSdk 26), JDK 17 (bundled with Android Studio).
 
 ## Auto-updates from GitHub
 
-Vault checks **github.com/alpho4jesus-dev/vault** releases daily and offers new versions in-app
+Vault checks **github.com/penscribed/vault** releases daily and offers new versions in-app
 (download → checksum check → Android's install screen; data is kept).
 **Setup and how to publish a release: see `RELEASING.md`.**
 

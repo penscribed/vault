@@ -35,7 +35,7 @@ data class ReleaseInfo(
  */
 object Updater {
 
-    private const val API = "https://api.github.com/repos/${BuildConfig.UPDATE_REPO}/releases/latest"
+    private val API = "https://api.github.com/repos/${BuildConfig.UPDATE_REPO}/releases/latest"
 
     /** Returns the latest release if it is newer than this app, otherwise null. */
     suspend fun checkForUpdate(): ReleaseInfo? = withContext(Dispatchers.IO) {
