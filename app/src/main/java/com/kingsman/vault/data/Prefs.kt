@@ -29,6 +29,7 @@ class Prefs(context: Context) {
     private val _sms = bool("smsEnabled", false)
     private val _autoUpdate = bool("autoUpdate", true)
     private val _availableUpdate = str("availableUpdate", "")
+    private val _consent = MutableStateFlow(sp.getInt("consentVersion", 0))
 
     val theme: StateFlow<String> = _theme
     val mode: StateFlow<String> = _mode
@@ -44,6 +45,8 @@ class Prefs(context: Context) {
     val autoUpdate: StateFlow<Boolean> = _autoUpdate
     /** Version found on GitHub that is newer than this app ("" = none). */
     val availableUpdate: StateFlow<String> = _availableUpdate
+    /** Version of the Privacy Policy / Terms the user accepted (0 = never). */
+    val consentVersion: StateFlow<Int> = _consent
 
     fun setTheme(v: String) { sp.edit().putString("theme", v).apply(); _theme.value = v }
     fun setMode(v: String) { sp.edit().putString("mode", v).apply(); _mode.value = v }
@@ -57,6 +60,7 @@ class Prefs(context: Context) {
     fun setLastBackup(v: Long) { sp.edit().putLong("lastBackup", v).apply(); _lastBackup.value = v }
     fun setSmsEnabled(v: Boolean) { sp.edit().putBoolean("smsEnabled", v).apply(); _sms.value = v }
     fun setAutoUpdate(v: Boolean) { sp.edit().putBoolean("autoUpdate", v).apply(); _autoUpdate.value = v }
+    fun setConsentVersion(v: Int) { sp.edit().putInt("consentVersion", v).commit(); _consent.value = v }
     fun setAvailableUpdate(v: String) { sp.edit().putString("availableUpdate", v).apply(); _availableUpdate.value = v }
 
     // ----- Security material (not observable) -----

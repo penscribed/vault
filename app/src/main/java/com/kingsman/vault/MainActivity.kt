@@ -37,6 +37,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kingsman.vault.ui.VaultRoot
 import com.kingsman.vault.ui.VaultViewModel
+import com.kingsman.vault.legal.LegalText
+import com.kingsman.vault.ui.screens.ConsentScreen
 import com.kingsman.vault.ui.screens.LockScreen
 import com.kingsman.vault.ui.theme.LocalHideAmounts
 import com.kingsman.vault.ui.theme.LocalVault
@@ -99,6 +101,7 @@ class MainActivity : FragmentActivity() {
         val business by vm.isBusiness.collectAsState()
         val hide by app.prefs.hideAmounts.collectAsState()
         val locked by app.lock.locked.collectAsState()
+        val consent by app.prefs.consentVersion.collectAsState()
 
         VaultTheme(dark = dark, business = business) {
             val c = LocalVault.current
@@ -115,20 +118,25 @@ class MainActivity : FragmentActivity() {
                         .background(c.bg)
                         .safeDrawingPadding()
                 ) {
-                    if (app.security.isPinSet()) {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .alpha(if (locked) 0f else 1f)
-                                .then(if (locked) Modifier.clearAndSetSemantics { } else Modifier)
-                        ) {
-                            VaultRoot(vm, this@MainActivity)
+                    if (consent < LegalText.CONSENT_VERSION) {
+                        // First launch, or the Privacy Policy / Terms changed: ask before anything else.
+                        ConsentScreen { app.prefs.setConsentVersion(LegalText.CONSENT_VERSION) }
+                    } else {
+                        if (app.security.isPinSet()) {
+                            Box(
+                                Modifier
+                                    .fillMaxSize()
+                                    .alpha(if (locked) 0f else 1f)
+                                    .then(if (locked) Modifier.clearAndSetSemantics { } else Modifier)
+                            ) {
+                                VaultRoot(vm, this@MainActivity)
+                            }
                         }
-                    }
-                    if (locked) {
-                        LockScreen(this@MainActivity) {
-                            app.lock.locked.value = false
-                            vm.onUnlocked()
+                        if (locked) {
+                            LockScreen(this@MainActivity) {
+                                app.lock.locked.value = false
+                                vm.onUnlocked()
+                            }
                         }
                     }
                 }

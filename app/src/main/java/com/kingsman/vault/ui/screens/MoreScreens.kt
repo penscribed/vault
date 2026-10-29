@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -82,6 +83,7 @@ fun MoreScreen(vm: VaultViewModel, nav: NavHostController, activity: MainActivit
     val cur by prefs.defaultCurrency.collectAsState()
     val lastBackup by prefs.lastBackup.collectAsState()
     var pickCur by remember { mutableStateOf(false) }
+    var confirmDeleteAll by remember { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize()) {
         ScreenHeader("More")
@@ -144,6 +146,36 @@ fun MoreScreen(vm: VaultViewModel, nav: NavHostController, activity: MainActivit
                 ) { nav.navigate(Routes.UPDATES) }
             }
 
+            SectionLabel("Privacy & legal")
+            VCard(Modifier.fillMaxWidth(), padding = 14.dp) {
+                NavRow("Privacy Policy", "What Vault stores and why") { nav.navigate(Routes.legal(LegalDoc.PRIVACY)) }
+                HorizontalDivider(color = c.line)
+                NavRow("Terms of Use", "Including the not-financial-advice notice") { nav.navigate(Routes.legal(LegalDoc.TERMS)) }
+                HorizontalDivider(color = c.line)
+                NavRow("Open-source licences", "Software Vault is built with") { nav.navigate(Routes.legal(LegalDoc.LICENCES)) }
+                HorizontalDivider(color = c.line)
+                NavRow("Contact", com.kingsman.vault.legal.LegalText.CONTACT_EMAIL) {
+                    val i = android.content.Intent(
+                        android.content.Intent.ACTION_SENDTO,
+                        android.net.Uri.parse("mailto:${com.kingsman.vault.legal.LegalText.CONTACT_EMAIL}")
+                    ).putExtra(android.content.Intent.EXTRA_SUBJECT, "Vault")
+                    activity.prepareExternal()
+                    runCatching { activity.startActivity(i) }
+                }
+                HorizontalDivider(color = c.line)
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { confirmDeleteAll = true }
+                        .padding(vertical = 14.dp)
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text("Delete all my data", color = c.exp, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        Text("Erase everything Vault has stored on this phone", color = c.muted, fontSize = 12.sp)
+                    }
+                }
+            }
+
             Spacer(Modifier.height(4.dp))
             Text(
                 "Vault ${com.kingsman.vault.BuildConfig.VERSION_NAME} · Track • Plan • Grow\nEverything stays on this phone, encrypted.",
@@ -152,6 +184,11 @@ fun MoreScreen(vm: VaultViewModel, nav: NavHostController, activity: MainActivit
         }
     }
     if (pickCur) CurrencyPickerDialog(cur, { prefs.setDefaultCurrency(it); pickCur = false }) { pickCur = false }
+    if (confirmDeleteAll) {
+        DeleteAllDataDialog(onDismiss = { confirmDeleteAll = false }) {
+            (activity.application as VaultApp).wipeEverythingAndRestart()
+        }
+    }
 }
 
 // ============================== Businesses ==============================

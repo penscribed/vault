@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.kingsman.vault.MainActivity
+import androidx.compose.material3.AlertDialog
 import com.kingsman.vault.data.Kind
+import com.kingsman.vault.legal.LegalText
 import com.kingsman.vault.ui.AmountText
 import com.kingsman.vault.ui.PrimaryButton
 import com.kingsman.vault.ui.Routes
@@ -54,6 +56,7 @@ fun BankAlertsScreen(vm: VaultViewModel, activity: MainActivity, nav: NavHostCon
     val suggestions by vm.suggestions.collectAsState()
     var paste by remember { mutableStateOf("") }
     var scanning by remember { mutableStateOf(false) }
+    var showDisclosure by remember { mutableStateOf(false) }
     val hasPerm = vm.hasSmsPermission()
 
     fun scan(days: Int) {
@@ -126,15 +129,7 @@ fun BankAlertsScreen(vm: VaultViewModel, activity: MainActivity, nav: NavHostCon
                     enabled && hasPerm
                 ) { on ->
                     if (on) {
-                        activity.askPermissions(listOf(Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS)) { ok ->
-                            if (ok) {
-                                prefs.setSmsEnabled(true)
-                                activity.ensureNotificationPermission()
-                                scan(30)
-                            } else {
-                                ctx.toast("SMS permission was not given")
-                            }
-                        }
+                        showDisclosure = true
                     } else {
                         prefs.setSmsEnabled(false)
                     }
@@ -181,5 +176,32 @@ fun BankAlertsScreen(vm: VaultViewModel, activity: MainActivity, nav: NavHostCon
             }
             Spacer(Modifier.height(24.dp))
         }
+    }
+
+    if (showDisclosure) {
+        AlertDialog(
+            onDismissRequest = { showDisclosure = false },
+            title = { Text("Allow Vault to read bank SMS?", fontWeight = FontWeight.ExtraBold) },
+            text = {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    Text(LegalText.SMS_DISCLOSURE)
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDisclosure = false
+                    activity.askPermissions(listOf(Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS)) { ok ->
+                        if (ok) {
+                            prefs.setSmsEnabled(true)
+                            activity.ensureNotificationPermission()
+                            scan(30)
+                        } else {
+                            ctx.toast("SMS permission was not given")
+                        }
+                    }
+                }) { Text("Allow") }
+            },
+            dismissButton = { TextButton(onClick = { showDisclosure = false }) { Text("Not now") } }
+        )
     }
 }

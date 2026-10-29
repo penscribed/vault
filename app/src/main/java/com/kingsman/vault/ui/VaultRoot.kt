@@ -41,6 +41,8 @@ import com.kingsman.vault.ui.screens.AddEntryScreen
 import com.kingsman.vault.ui.screens.BackupScreen
 import com.kingsman.vault.ui.screens.BankAlertsScreen
 import com.kingsman.vault.ui.screens.BudgetsScreen
+import com.kingsman.vault.ui.screens.LegalDoc
+import com.kingsman.vault.ui.screens.LegalScreen
 import com.kingsman.vault.ui.screens.UpdatesScreen
 import com.kingsman.vault.ui.screens.BusinessesScreen
 import com.kingsman.vault.ui.screens.CategoriesScreen
@@ -68,6 +70,8 @@ object Routes {
     const val BUDGETS = com.kingsman.vault.data.ROUTE_BUDGETS
     const val BANK = com.kingsman.vault.data.ROUTE_BANK
     const val UPDATES = com.kingsman.vault.update.ROUTE_UPDATES
+    const val LEGAL = "legal/{doc}"
+    fun legal(doc: String) = "legal/$doc"
 
     fun add(txnId: Long = -1L, recurringId: Long = -1L, suggestionId: Long = -1L) =
         "add?txnId=$txnId&recurringId=$recurringId&suggestionId=$suggestionId"
@@ -112,6 +116,9 @@ fun VaultRoot(vm: VaultViewModel, activity: MainActivity) {
             composable(Routes.BUDGETS) { BudgetsScreen(vm, activity) { nav.popBackStack() } }
             composable(Routes.BANK) { BankAlertsScreen(vm, activity, nav) { nav.popBackStack() } }
             composable(Routes.UPDATES) { UpdatesScreen(vm, activity) { nav.popBackStack() } }
+            composable(Routes.LEGAL, arguments = listOf(navArgument("doc") { type = NavType.StringType })) { e ->
+                LegalScreen(e.arguments?.getString("doc") ?: LegalDoc.PRIVACY) { nav.popBackStack() }
+            }
         }
 
         // Open a screen requested by a notification or a shared bank alert

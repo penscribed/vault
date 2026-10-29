@@ -35,6 +35,11 @@ Requirements: Android 8.0+ (minSdk 26), JDK 17 (bundled with Android Studio).
 | **Receipt photos** | Snap or pick a photo on any entry. Photos are shrunk, stripped of location data and **encrypted** in private storage. View from Records. Optional in backups. |
 | **Look** | Midnight design, dark ↔ light ↔ system, your Vault logo as app icon. |
 
+## Privacy & compliance
+
+Consent screen, Privacy Policy, Terms, licences, SMS disclosure and "Delete all my data" are built in.
+Public policy pages live in `docs/` (GitHub Pages). See **`COMPLIANCE.md`**.
+
 ## Auto-updates from GitHub
 
 Vault checks **github.com/penscribed/vault** releases daily and offers new versions in-app

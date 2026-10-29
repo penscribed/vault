@@ -8,8 +8,8 @@ plugins {
 }
 
 // Version: GitHub Actions passes -PversionName=1.2.0 -PversionCode=10200 from the release tag.
-val vaultVersionName = (project.findProperty("versionName") as String?) ?: "1.2.0"
-val vaultVersionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 10200
+val vaultVersionName = (project.findProperty("versionName") as String?) ?: "1.3.0"
+val vaultVersionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 10300
 // GitHub repo that publishes releases (owner/name). Override with -PupdateRepo=owner/name.
 val updateRepo = (project.findProperty("updateRepo") as String?) ?: "penscribed/vault"
 
